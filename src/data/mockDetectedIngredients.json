@@ -1,0 +1,6 @@
+[
+  { "id": "detected-1", "name": "감자", "status": "confirmed" },
+  { "id": "detected-2", "name": "양파", "status": "confirmed" },
+  { "id": "detected-3", "name": "계란", "status": "confirmed" },
+  { "id": "detected-4", "name": "애호박", "status": "uncertain" }
+]

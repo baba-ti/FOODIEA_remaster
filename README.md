@@ -62,7 +62,7 @@ Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 �
 사용자 요청
   → 날짜·날씨·취향·맛집·제외 조건 구성
   → 검색어 생성
-  → 만개의레시피 웹 검색 1회
+  → 만개의레시피 검색 1회
   → 출처와 사용자 조건 검증
   → 추천 목록 생성
 ```
@@ -85,22 +85,20 @@ Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 �
 검색 조건 생성
   → 만개의레시피 한정 웹 검색
   → 구조화된 레시피 후보 생성
-  → URL·제외 재료·조리 시간 검증
+  → URL제외 재료 조리 시간 검증
   → 결과 반환
 ```
 
 ## RAG 구성
 
-Foodia는 벡터 DB에 문서를 미리 적재하는 전통적인 RAG 대신 OpenAI `web_search`를 Retrieval 계층으로 사용하는 **실시간 Web RAG 패턴**을 적용했습니다.
+OpenAI `web_search`를 Retrieval 계층으로 사용하는 **실시간 Web RAG 패턴**을 적용했습니다.
 
 | 단계         | Foodia 구현                                             |
 | ------------ | ------------------------------------------------------- |
-| Retrieval    | `10000recipe.com`으로 제한한 OpenAI 웹 검색             |
+| Retrieval    | `10000recipe.com`으로 제한한 OpenAI검색                 |
 | Augmentation | 검색 결과에 날씨, 취향, 보유·제외 재료와 최근 기록 결합 |
 | Generation   | 출처 URL을 포함한 구조화된 메뉴·레시피 생성             |
 | Validation   | 허용 도메인, 실제 검색 URL, 제외 재료와 조리 시간 검사  |
-
-현재 구조에는 임베딩 모델, 문서 청킹, FAISS·Chroma·Pinecone 같은 벡터 DB가 없습니다.
 
 ## OpenAI 모델 역할
 
@@ -181,30 +179,6 @@ RECIPE_MAX_RETRIES=0
 ASSISTANT_TIMEOUT_SECONDS=8
 ```
 
-서버를 실행합니다.
-
-```powershell
-.\.venv\Scripts\python.exe -m uvicorn src.app:app --reload --host 0.0.0.0 --port 8000
-```
-
-- Swagger UI: `http://127.0.0.1:8000/docs`
-- 상태 확인: `http://127.0.0.1:8000/health`
-
-### Android 앱
-
-```powershell
-cd frontend-expo
-npm install
-npx.cmd expo run:android
-```
-
-Android 에뮬레이터는 기본적으로 `http://10.0.2.2:8000`의 로컬 백엔드에 연결합니다. 실제 기기나 배포 빌드는 공개 HTTPS 백엔드를 지정해야 합니다.
-
-```powershell
-$env:EXPO_PUBLIC_API_URL='https://your-api.example.com'
-npx.cmd expo run:android
-```
-
 ## 릴리스 APK
 
 64비트 ARM Android 실기기용 서명 APK를 생성합니다.
@@ -219,8 +193,6 @@ cd frontend-expo
 ```text
 frontend-expo/android/app/build/outputs/apk/release/app-release.apk
 ```
-
-`foodia-upload-key.jks`와 `android/keystore.properties`는 Git에서 제외됩니다. 동일한 앱의 업데이트 서명에 필요하므로 별도 보안 저장소에 반드시 백업해야 합니다.
 
 ## API
 

@@ -1,22 +1,22 @@
 <p align="center">
-  <img src="frontend-expo/assets/icon.png" width="120" alt="Foodia 앱 아이콘" />
+  <img src="frontend-expo/assets/180387119.jpg" width="120" alt="Foodia 앱 아이콘" />
 </p>
 
 <h1 align="center">Foodia Remaster</h1>
 
 <p align="center">
-  날씨·재료·개인 기록을 조합해 근거 있는 메뉴 결정을 돕는 AI 음식 비서
+  날씨,재료,개인 기록을 조합해 메뉴 결정을 돕는 AI 입니다
 </p>
 
 ## 프로젝트 소개
 
-Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 계절, 알레르기와 제외 재료, 좋아하는 음식, 최근 메뉴와 즐겨찾기 맛집 기록을 함께 고려해 메뉴를 추천하는 React Native 애플리케이션입니다.
+Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 계절, 알레르기와 제외 재료, 좋아하는 음식, 최근 메뉴와 즐겨찾기 맛집 기록을 함께 고려해 메뉴를 추천하는 애플리케이션입니다.
 
 기존의 고정 레시피 DB와 YOLO 탐지 서버를 제거하고 다음 구조로 리마스터했습니다.
 
 - OpenAI 비전 모델을 이용한 식재료 이미지 분석
-- LangGraph로 분리한 재료 인식·음식 비서·레시피 검증 워크플로
-- 만개의레시피 도메인으로 제한한 실시간 웹 검색
+- LangGraph로 분리한 재료 인식,음식 추천,레시피 검증 워크플로
+- 만개의레시피 도메인으로 실시간 검색
 - 실제 검색 출처 URL을 포함하는 구조화된 추천 결과
 - 별도 사용자 DB 없이 모바일 로컬 저장소에 보관하는 취향과 맛집 기록
 
@@ -25,7 +25,7 @@ Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 �
 ### AI 음식 비서
 
 - 자연어로 원하는 음식이나 상황 입력
-- 현재 날짜·계절과 위치 기반 날씨 반영
+- 현재 날짜,계절과 위치 기반 날씨 반영
 - 알레르기 및 싫어하는 재료 제외
 - 좋아하는 음식과 평점 높은 맛집 메뉴 반영
 - 최근 먹은 메뉴의 반복 추천 방지
@@ -33,7 +33,6 @@ Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 �
 
 ### 식재료 이미지 분석
 
-- 카메라 촬영 또는 갤러리 이미지 선택
 - OpenAI 이미지 입력으로 식재료 후보와 신뢰도 추출
 - 사용자가 탐지 결과를 확인하고 수정한 뒤 추천에 사용
 
@@ -41,7 +40,7 @@ Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 �
 
 - 식당명, 메뉴, 사진, 평점과 메모 기록
 - 즐겨찾기한 메뉴를 AI 추천 취향 신호로 사용
-- OpenStreetMap 기반 지도에서 기록 위치 확인
+- 지도에서 기록 위치 확인
 - 마커 선택 후 네이버 지도에서 해당 위치 열기
 
 ### 사용자 설정
@@ -53,19 +52,7 @@ Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 �
 
 ## 시스템 구조
 
-```mermaid
-flowchart LR
-    U[사용자] --> F[React Native · Expo]
-    F --> L[(AsyncStorage · SQLite)]
-    F --> A[FastAPI]
-    A --> G[LangGraph 워크플로]
-    G --> V[GPT-4o mini<br/>이미지 재료 분석]
-    G --> S[GPT-5.6 Luna<br/>웹 검색·메뉴 추천]
-    S --> R[만개의레시피]
-    G --> W[Open-Meteo<br/>현재 날씨]
-    G --> C[출처·제외 조건 검증]
-    C --> F
-```
+![Foodia 시스템 구조](docs/system-architecture.png)
 
 ## LangGraph 워크플로
 
@@ -106,37 +93,37 @@ flowchart LR
 
 Foodia는 벡터 DB에 문서를 미리 적재하는 전통적인 RAG 대신 OpenAI `web_search`를 Retrieval 계층으로 사용하는 **실시간 Web RAG 패턴**을 적용했습니다.
 
-| 단계 | Foodia 구현 |
-| --- | --- |
-| Retrieval | `10000recipe.com`으로 제한한 OpenAI 웹 검색 |
+| 단계         | Foodia 구현                                             |
+| ------------ | ------------------------------------------------------- |
+| Retrieval    | `10000recipe.com`으로 제한한 OpenAI 웹 검색             |
 | Augmentation | 검색 결과에 날씨, 취향, 보유·제외 재료와 최근 기록 결합 |
-| Generation | 출처 URL을 포함한 구조화된 메뉴·레시피 생성 |
-| Validation | 허용 도메인, 실제 검색 URL, 제외 재료와 조리 시간 검사 |
+| Generation   | 출처 URL을 포함한 구조화된 메뉴·레시피 생성             |
+| Validation   | 허용 도메인, 실제 검색 URL, 제외 재료와 조리 시간 검사  |
 
 현재 구조에는 임베딩 모델, 문서 청킹, FAISS·Chroma·Pinecone 같은 벡터 DB가 없습니다.
 
 ## OpenAI 모델 역할
 
-| 환경변수 | 기본 모델 | 역할 | 현재 상태 |
-| --- | --- | --- | --- |
-| `OPENAI_VISION_MODEL` | `gpt-4o-mini` | 이미지 속 식재료 탐지 | 사진 분석 시 사용 |
-| `OPENAI_RECIPE_MODEL` | `gpt-4o-mini` | 검색된 레시피의 AI 2차 검증 | 기본값 비활성화 |
+| 환경변수              | 기본 모델      | 역할                               | 현재 상태             |
+| --------------------- | -------------- | ---------------------------------- | --------------------- |
+| `OPENAI_VISION_MODEL` | `gpt-4o-mini`  | 이미지 속 식재료 탐지              | 사진 분석 시 사용     |
+| `OPENAI_RECIPE_MODEL` | `gpt-4o-mini`  | 검색된 레시피의 AI 2차 검증        | 기본값 비활성화       |
 | `OPENAI_SEARCH_MODEL` | `gpt-5.6-luna` | 만개의레시피 검색과 빠른 메뉴 추천 | 음식 비서의 핵심 모델 |
 
 기본 설정은 `ENABLE_LLM_RECIPE_VERIFICATION=false`입니다. Python 규칙 기반 검증을 우선해 응답 시간과 비용을 줄였으며, 필요할 때 AI 2차 검증을 활성화할 수 있습니다.
 
 ## 기술 스택
 
-| 영역 | 기술 |
-| --- | --- |
-| Mobile | React Native 0.86, Expo SDK 57, React Navigation |
-| Local data | AsyncStorage, Expo SQLite |
-| Map | OpenStreetMap, Leaflet, React Native WebView |
-| Backend | Python 3.13, FastAPI, Uvicorn, Pydantic |
-| AI workflow | LangGraph, LangChain OpenAI |
-| AI API | OpenAI Responses API, Structured Outputs, Web Search |
-| Weather | Open-Meteo API |
-| Android | Kotlin, Gradle, Android SDK 36 |
+| 영역        | 기술                                                 |
+| ----------- | ---------------------------------------------------- |
+| Mobile      | React Native 0.86, Expo SDK 57, React Navigation     |
+| Local data  | AsyncStorage, Expo SQLite                            |
+| Map         | OpenStreetMap, Leaflet, React Native WebView         |
+| Backend     | Python 3.13, FastAPI, Uvicorn, Pydantic              |
+| AI workflow | LangGraph, LangChain OpenAI                          |
+| AI API      | OpenAI Responses API, Structured Outputs, Web Search |
+| Weather     | Open-Meteo API                                       |
+| Android     | Kotlin, Gradle, Android SDK 36                       |
 
 ## 디렉터리 구조
 
@@ -237,12 +224,12 @@ frontend-expo/android/app/build/outputs/apk/release/app-release.apk
 
 ## API
 
-| Method | Endpoint | 설명 |
-| --- | --- | --- |
-| `GET` | `/health` | 서버 상태 확인 |
-| `POST` | `/api/v1/assistant/recommend` | 개인화 AI 음식 추천 |
-| `POST` | `/api/v1/ingredients/analyze` | 이미지 식재료 분석 |
-| `POST` | `/api/v1/recipes/search` | 재료 기반 웹 레시피 검색 |
+| Method | Endpoint                      | 설명                     |
+| ------ | ----------------------------- | ------------------------ |
+| `GET`  | `/health`                     | 서버 상태 확인           |
+| `POST` | `/api/v1/assistant/recommend` | 개인화 AI 음식 추천      |
+| `POST` | `/api/v1/ingredients/analyze` | 이미지 식재료 분석       |
+| `POST` | `/api/v1/recipes/search`      | 재료 기반 웹 레시피 검색 |
 
 ## 테스트
 

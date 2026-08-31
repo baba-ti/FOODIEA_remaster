@@ -1,0 +1,10 @@
+fastapi>=0.116,<1
+httpx>=0.28,<1
+uvicorn[standard]>=0.35,<1
+python-multipart>=0.0.20,<1
+python-dotenv>=1.1,<2
+pydantic-settings>=2.10,<3
+langgraph>=0.6,<2
+langchain-core>=0.3,<2
+langchain-openai>=0.3.9,<2
+openai>=2,<3

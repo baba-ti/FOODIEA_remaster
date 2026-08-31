@@ -1,0 +1,1 @@
+"""Foodia graph nodes."""

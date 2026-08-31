@@ -1,43 +1,62 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
-# dependencies
-node_modules/
-
-# Expo
-.expo/
-dist/
-web-build/
-
-# Native
-*.orig.*
+# Environment variables and credentials
+.env
+.env.*
 *.jks
+*.keystore
 *.p8
 *.p12
+*.pem
 *.key
 *.mobileprovision
+frontend-expo/android/keystore.properties
 
-# Metro
+# JavaScript / Expo
+node_modules/
+.expo/
 .metro-health-check*
-
-# debug
+dist/
+web-build/
+*.tsbuildinfo
 npm-debug.*
 yarn-debug.*
 yarn-error.*
 
-# macOS
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Android / native build output
+.gradle/
+.kotlin/
+.cxx/
+android/local.properties
+android/app/build/
+android/build/
+frontend-expo/android/local.properties
+frontend-expo/android/app/build/
+frontend-expo/android/build/
+
+# Generated release files
+*.apk
+*.aab
+
+# IDE and operating system
+.idea/
+.vscode/
+*.iml
 .DS_Store
-*.pem
-
-# local env files
-.env*.local
-
-# typescript
-*.tsbuildinfo
-
+Thumbs.db
+*.log
 
 # SDK migration backups
 android-sdk*-backup/
 ios-sdk*-backup/
 package.sdk*.backup.json
 package-lock.sdk*.backup.json
-

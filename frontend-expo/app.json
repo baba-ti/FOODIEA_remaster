@@ -1,0 +1,55 @@
+{
+  "expo": {
+    "name": "Foodia",
+    "slug": "foodia-remaster",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "식재료 사진을 촬영하기 위해 카메라를 사용합니다.",
+        "NSPhotoLibraryUsageDescription": "식재료 사진을 선택하기 위해 사진 보관함을 사용합니다."
+      },
+      "bundleIdentifier": "foodia.appproject"
+    },
+    "android": {
+      "permissions": [
+        "CAMERA"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "foodia.appproject"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "식재료 사진을 촬영하기 위해 카메라를 사용합니다.",
+          "photosPermission": "식재료 사진을 선택하기 위해 사진 보관함을 사용합니다."
+        }
+      ],
+      "expo-sqlite",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "맛집 기록의 위치를 지도에 표시하기 위해 현재 위치를 사용합니다."
+        }
+      ]
+    ]
+  }
+}

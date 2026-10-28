@@ -1,3 +1,4 @@
+import logging
 from functools import lru_cache
 from typing import Any
 from urllib.parse import urlparse
@@ -155,6 +156,12 @@ async def search_web_recipes(
     except ConfigurationError:
         raise
     except Exception as exc:
+        logging.getLogger(__name__).error(
+            "OpenAI search failure: operation=recipes exception=%s status=%s code=%s",
+            type(exc).__name__,
+            getattr(exc, "status_code", None),
+            getattr(exc, "code", None),
+        )
         raise WorkflowError("OpenAI 만개의레시피 웹 검색에 실패했습니다.") from exc
 
     drafts = response.output_parsed
@@ -219,6 +226,12 @@ async def search_assistant_recipes(
     except ConfigurationError:
         raise
     except Exception as exc:
+        logging.getLogger(__name__).error(
+            "OpenAI search failure: operation=assistant exception=%s status=%s code=%s",
+            type(exc).__name__,
+            getattr(exc, "status_code", None),
+            getattr(exc, "code", None),
+        )
         raise WorkflowError("OpenAI 음식 추천 검색에 실패했습니다.") from exc
 
     drafts = response.output_parsed

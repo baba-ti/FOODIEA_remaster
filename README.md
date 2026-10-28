@@ -13,7 +13,6 @@
 - 자연어 요청과 사용자 상황을 고려한 개인화 메뉴 추천 애플리케이션
 - 추천 반영 정보: 현재 날씨·계절, 알레르기·제외 재료, 좋아하는 음식, 최근 메뉴, 즐겨찾기 맛집 기록
 
-- 기존 고정 레시피 DB와 YOLO 탐지 서버 제거
 - OpenAI API와 LangGraph 기반 구조로 리마스터
 
 - OpenAI 비전 모델을 이용한 식재료 이미지 분석
@@ -30,7 +29,6 @@
 - 알레르기 및 싫어하는 재료 제외
 - 좋아하는 음식과 평점 높은 맛집 메뉴 반영
 - 최근 먹은 메뉴의 반복 추천 방지
-- 원문 링크가 있는 메뉴 목록 제공
 
 ### 식재료 이미지 분석
 
@@ -49,11 +47,12 @@
 - 최초 실행 시 알레르기, 싫어하는 재료와 좋아하는 음식 등록
 - 날씨·계절·맛집 기록 반영 여부 설정
 - 최근 메뉴 제외 기간 설정
-- AsyncStorage와 SQLite를 이용한 기기 로컬 저장
 
 ## 시스템 구조
 
-![Foodia 시스템 구조](docs/system-architecture.png)
+![Foodia 시스템 구조](docs/system-architecture-simple.png)
+
+[상세 아키텍처 보기](docs/system-architecture.png)
 
 ## LangGraph 워크플로
 
@@ -66,9 +65,6 @@
   → 출처와 사용자 조건 검증
   → 추천 목록 생성
 ```
-
-- 검색 제한 시간: 8초
-- 시간 초과 시 검색 결과 링크를 포함한 대체 응답 반환
 
 ### 식재료 인식
 
@@ -190,7 +186,7 @@ cd frontend-expo
 - 결과 파일:
 
 ```text
-frontend-expo/android/app/build/outputs/apk/release/app-release.apk
+frontend-expo/android/app/build/outputs/apk/release/app-release.apk   <small>Azure 배포 검증 완료, 비용 문제로 인한 배포 중단 상태</small>
 ```
 
 ## API
@@ -209,15 +205,10 @@ cd backend
 .\.venv\Scripts\python.exe -m pytest
 ```
 
-## 설계 선택과 한계
+## 추후 업데이트 예정
 
-- 별도 사용자 DB 제거로 운영 복잡도 축소
-- 개인 기록의 기기 로컬 저장
-- 추천 요청 시 필요한 취향·맛집 정보를 백엔드와 OpenAI에 전달
-- AI의 알레르기 안전 보장 한계
-- 사용자의 원문 레시피·제품 표시 재확인 필요
-- 8초 대체 응답 시 상세 레시피 검증 대신 검색 결과 페이지 제공 가능
-- 현재 릴리스 APK 대상: `arm64-v8a` Android 실기기
+- 수집한 DB RAG 진행
+- 현재 릴리스 APK 대상: `arm64-v8a` Android 실기기 -> ios 추가 예정
 
 ## License
 

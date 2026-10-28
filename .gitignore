@@ -60,3 +60,11 @@ android-sdk*-backup/
 ios-sdk*-backup/
 package.sdk*.backup.json
 package-lock.sdk*.backup.json
+
+# Local Azure deployment packages and diagnostic downloads
+/foodia-*.zip
+/backend/foodia-*.zip
+/output.tar.zst
+
+# Local architecture backup
+/docs/system-architecture-before-azure.png

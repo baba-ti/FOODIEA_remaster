@@ -17,8 +17,8 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:8081,http://localhost:19006"
 
     openai_api_key: SecretStr | None = None
-    openai_vision_model: str = "gpt-4o-mini"
-    openai_recipe_model: str = "gpt-4o-mini"
+    openai_vision_model: str = "gpt-5.6-sol"
+    openai_recipe_model: str = "gpt-5.6-luna"
     openai_search_model: str = "gpt-5.6-luna"
     recipe_search_domain: str = "10000recipe.com"
     enable_llm_recipe_verification: bool = False

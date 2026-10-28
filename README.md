@@ -104,8 +104,8 @@ OpenAI `web_search`를 Retrieval 계층으로 사용하는 **실시간 Web RAG �
 
 | 환경변수              | 기본 모델      | 역할                               | 현재 상태             |
 | --------------------- | -------------- | ---------------------------------- | --------------------- |
-| `OPENAI_VISION_MODEL` | `gpt-4o-mini`  | 이미지 속 식재료 탐지              | 사진 분석 시 사용     |
-| `OPENAI_RECIPE_MODEL` | `gpt-4o-mini`  | 검색된 레시피의 AI 2차 검증        | 기본값 비활성화       |
+| `OPENAI_VISION_MODEL` | `gpt-5.6-sol`  | 이미지 속 식재료 탐지              | 사진 분석 시 사용     |
+| `OPENAI_RECIPE_MODEL` | `gpt-5.6-luna`  | 검색된 레시피의 AI 2차 검증        | 기본값 비활성화       |
 | `OPENAI_SEARCH_MODEL` | `gpt-5.6-luna` | 만개의레시피 검색과 빠른 메뉴 추천 | 음식 비서의 핵심 모델 |
 
 기본 설정은 `ENABLE_LLM_RECIPE_VERIFICATION=false`입니다. Python 규칙 기반 검증을 우선해 응답 시간과 비용을 줄였으며, 필요할 때 AI 2차 검증을 활성화할 수 있습니다.
@@ -170,8 +170,8 @@ py -3.13 -m venv .venv
 
 ```ini
 OPENAI_API_KEY=your_api_key
-OPENAI_VISION_MODEL=gpt-4o-mini
-OPENAI_RECIPE_MODEL=gpt-4o-mini
+OPENAI_VISION_MODEL=gpt-5.6-sol
+OPENAI_RECIPE_MODEL=gpt-5.6-luna
 OPENAI_SEARCH_MODEL=gpt-5.6-luna
 RECIPE_SEARCH_DOMAIN=10000recipe.com
 ENABLE_LLM_RECIPE_VERIFICATION=false

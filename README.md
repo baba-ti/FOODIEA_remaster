@@ -186,8 +186,10 @@ cd frontend-expo
 - 결과 파일:
 
 ```text
-frontend-expo/android/app/build/outputs/apk/release/app-release.apk   <small>Azure 배포 검증 완료, 비용 문제로 인한 배포 중단 상태</small>
+frontend-expo/android/app/build/outputs/apk/release/app-release.apk
 ```
+
+<small>Azure 배포 검증 완료, 비용 문제로 인한 배포 중단 상태</small>
 
 ## API
 

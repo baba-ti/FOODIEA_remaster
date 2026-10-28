@@ -1,7 +1,8 @@
 # Foodia Backend
 
-Foodia의 자연어 음식 추천, 이미지 재료 인식과 웹 레시피 검색을 담당하는 FastAPI + LangGraph 백엔드입니다.
-애플리케이션 DB 없이 요청 단위로 그래프를 실행합니다.
+- FastAPI + LangGraph 기반 Foodia 백엔드
+- 자연어 음식 추천, 이미지 재료 인식, 웹 레시피 검색 담당
+- 애플리케이션 DB 없이 요청 단위 그래프 실행
 
 ## 처리 흐름
 
@@ -18,19 +19,20 @@ POST /api/v1/ingredients/analyze
 사용자가 앱에서 재료를 확인/수정
 
 POST /api/v1/recipes/search
-  검색어 생성 -> OpenAI 웹 검색(만개의레시피 한정) -> 레시피 생성 -> 검증
+  검색어 생성 -> OpenAI 웹 검색 -> 레시피 생성 -> 검증
                                           | 실패(최대 1회)
                                           v
                                     검색어 보정 후 재검색
 ```
 
-LangGraph의 `TypedDict` 상태, 노드별 부분 상태 반환, 구조화 출력,
-조건부 엣지와 단일 검색 패턴을 사용합니다. 사용자 확인은 두 API 사이의
-프론트 화면에서 처리하므로 체크포인트 DB는 필요하지 않습니다.
+- LangGraph `TypedDict` 상태와 노드별 부분 상태 반환 사용
+- 구조화 출력, 조건부 엣지, 단일 검색 패턴 적용
+- 두 API 사이의 프론트 화면에서 사용자 확인 처리
+- 체크포인트 DB 불필요
 
 ## 실행
 
-Python 3.13을 권장합니다.
+- 권장 Python 버전: 3.13
 
 ```powershell
 cd backend
@@ -40,20 +42,22 @@ python -m pip install -r requirements-dev.txt
 New-Item .env -ItemType File
 ```
 
-`.env`에 `OPENAI_API_KEY`를 입력한 뒤 실행합니다. 웹 검색은 OpenAI Responses
-API의 `web_search`를 사용하며 `10000recipe.com` 도메인으로 제한됩니다.
+- 실행 전 `.env`에 `OPENAI_API_KEY` 설정
+- 웹 검색: OpenAI Responses API의 `web_search` 사용
+- 검색 도메인: `10000recipe.com`으로 제한
 
 ```powershell
 python -m uvicorn src.app:app --reload --host 0.0.0.0 --port 8000
 ```
 
-확인 주소:
+- 확인 주소:
 
 - Swagger UI: `http://localhost:8000/docs`
 - 상태 확인: `http://localhost:8000/health`
 
-Android 에뮬레이터에서 백엔드 주소는 `http://10.0.2.2:8000`을 사용합니다.
-실제 휴대폰에서는 PC와 같은 Wi-Fi에 연결하고 `http://PC의_LAN_IP:8000`을 사용합니다.
+- Android 에뮬레이터 백엔드 주소: `http://10.0.2.2:8000`
+- 실제 휴대폰 연결 조건: PC와 동일한 Wi-Fi 사용
+- 실제 휴대폰 백엔드 주소: `http://PC의_LAN_IP:8000`
 
 ## API
 
@@ -61,8 +65,8 @@ Android 에뮬레이터에서 백엔드 주소는 `http://10.0.2.2:8000`을 사�
 
 `POST /api/v1/assistant/recommend`
 
-자연어 요청과 앱 로컬 저장소의 좋아하는 음식, 즐겨찾기 맛집, 제외 재료를
-전달합니다. 위치 권한이 허용된 경우 현재 날씨도 추천 근거로 사용합니다.
+- 전달 정보: 자연어 요청, 앱 로컬 저장소의 좋아하는 음식·즐겨찾기 맛집·제외 재료
+- 위치 권한 허용 시 현재 날씨를 추천 근거로 활용
 
 ### 이미지 재료 분석
 
@@ -87,5 +91,5 @@ Android 에뮬레이터에서 백엔드 주소는 `http://10.0.2.2:8000`을 사�
 }
 ```
 
-결과에는 생성된 레시피와 웹 출처 URL이 함께 포함됩니다. AI 결과는 조리 전
-사용자가 알레르기, 식재료 상태, 가열 안전성을 확인해야 합니다.
+- 결과 구성: 생성된 레시피와 웹 출처 URL
+- 조리 전 사용자 확인 항목: 알레르기, 식재료 상태, 가열 안전성

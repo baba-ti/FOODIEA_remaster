@@ -5,18 +5,19 @@
 <h1 align="center">Foodia Remaster</h1>
 
 <p align="center">
-  날씨,재료,개인 기록을 조합해 메뉴 결정을 돕는 AI 입니다
+  날씨·재료·개인 기록 기반 AI 메뉴 추천
 </p>
 
 ## 프로젝트 소개
 
-Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 계절, 알레르기와 제외 재료, 좋아하는 음식, 최근 메뉴와 즐겨찾기 맛집 기록을 함께 고려해 메뉴를 추천하는 애플리케이션입니다.
+- 자연어 요청과 사용자 상황을 고려한 개인화 메뉴 추천 애플리케이션
+- 추천 반영 정보: 현재 날씨·계절, 알레르기·제외 재료, 좋아하는 음식, 최근 메뉴, 즐겨찾기 맛집 기록
 
-기존의 고정 레시피 DB와 YOLO 탐지 서버를 제거하고 다음 구조로 리마스터했습니다.
+- 기존 고정 레시피 DB와 YOLO 탐지 서버 제거
+- OpenAI API와 LangGraph 기반 구조로 리마스터
 
 - OpenAI 비전 모델을 이용한 식재료 이미지 분석
 - LangGraph로 분리한 재료 인식,음식 추천,레시피 검증 워크플로
-- 만개의레시피 도메인으로 실시간 검색
 - 실제 검색 출처 URL을 포함하는 구조화된 추천 결과
 - 별도 사용자 DB 없이 모바일 로컬 저장소에 보관하는 취향과 맛집 기록
 
@@ -29,7 +30,7 @@ Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 �
 - 알레르기 및 싫어하는 재료 제외
 - 좋아하는 음식과 평점 높은 맛집 메뉴 반영
 - 최근 먹은 메뉴의 반복 추천 방지
-- 만개의레시피 원문 링크가 있는 메뉴 목록 제공
+- 원문 링크가 있는 메뉴 목록 제공
 
 ### 식재료 이미지 분석
 
@@ -62,12 +63,12 @@ Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 �
 사용자 요청
   → 날짜·날씨·취향·맛집·제외 조건 구성
   → 검색어 생성
-  → 만개의레시피 검색 1회
   → 출처와 사용자 조건 검증
   → 추천 목록 생성
 ```
 
-검색이 8초 안에 완료되지 않으면 앱이 멈추지 않도록 만개의레시피 검색 결과 링크를 포함한 대체 응답을 반환합니다.
+- 검색 제한 시간: 8초
+- 시간 초과 시 검색 결과 링크를 포함한 대체 응답 반환
 
 ### 식재료 인식
 
@@ -83,7 +84,7 @@ Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 �
 
 ```text
 검색 조건 생성
-  → 만개의레시피 한정 웹 검색
+  → 웹 검색
   → 구조화된 레시피 후보 생성
   → URL제외 재료 조리 시간 검증
   → 결과 반환
@@ -91,24 +92,26 @@ Foodia Remaster는 사용자의 자연어 요청뿐 아니라 현재 날씨와 �
 
 ## RAG 구성
 
-OpenAI `web_search`를 Retrieval 계층으로 사용하는 **실시간 Web RAG 패턴**을 적용했습니다.
+- OpenAI `web_search`를 Retrieval 계층으로 활용하는 **실시간 Web RAG 패턴** 적용
 
 | 단계         | Foodia 구현                                             |
 | ------------ | ------------------------------------------------------- |
-| Retrieval    | `10000recipe.com`으로 제한한 OpenAI검색                 |
+| Retrieval    | 웹 OpenAI검색                                           |
 | Augmentation | 검색 결과에 날씨, 취향, 보유·제외 재료와 최근 기록 결합 |
 | Generation   | 출처 URL을 포함한 구조화된 메뉴·레시피 생성             |
 | Validation   | 허용 도메인, 실제 검색 URL, 제외 재료와 조리 시간 검사  |
 
 ## OpenAI 모델 역할
 
-| 환경변수              | 기본 모델      | 역할                               | 현재 상태             |
-| --------------------- | -------------- | ---------------------------------- | --------------------- |
-| `OPENAI_VISION_MODEL` | `gpt-5.6-sol`  | 이미지 속 식재료 탐지              | 사진 분석 시 사용     |
-| `OPENAI_RECIPE_MODEL` | `gpt-5.6-luna`  | 검색된 레시피의 AI 2차 검증        | 기본값 비활성화       |
-| `OPENAI_SEARCH_MODEL` | `gpt-5.6-luna` | 만개의레시피 검색과 빠른 메뉴 추천 | 음식 비서의 핵심 모델 |
+| 환경변수              | 기본 모델      | 역할                        | 현재 상태             |
+| --------------------- | -------------- | --------------------------- | --------------------- |
+| `OPENAI_VISION_MODEL` | `gpt-5.6-sol`  | 이미지 속 식재료 탐지       | 사진 분석 시 사용     |
+| `OPENAI_RECIPE_MODEL` | `gpt-5.6-luna` | 검색된 레시피의 AI 2차 검증 | 기본값 비활성화       |
+| `OPENAI_SEARCH_MODEL` | `gpt-5.6-luna` | 검색과 빠른 메뉴 추천       | 음식 비서의 핵심 모델 |
 
-기본 설정은 `ENABLE_LLM_RECIPE_VERIFICATION=false`입니다. Python 규칙 기반 검증을 우선해 응답 시간과 비용을 줄였으며, 필요할 때 AI 2차 검증을 활성화할 수 있습니다.
+- AI 2차 검증 기본 설정: `ENABLE_LLM_RECIPE_VERIFICATION=false`
+- Python 규칙 기반 검증 우선 적용으로 응답 시간과 비용 절감
+- 필요 시 AI 2차 검증 활성화 가능
 
 ## 기술 스택
 
@@ -166,7 +169,7 @@ py -3.13 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
 ```
 
-`backend/.env` 파일을 만들고 다음 값을 설정합니다.
+- `backend/.env` 파일 생성 및 다음 환경변수 설정
 
 ```ini
 OPENAI_API_KEY=your_api_key
@@ -181,14 +184,14 @@ ASSISTANT_TIMEOUT_SECONDS=8
 
 ## 릴리스 APK
 
-64비트 ARM Android 실기기용 서명 APK를 생성합니다.
+- 64비트 ARM Android 실기기용 서명 APK 생성
 
 ```powershell
 cd frontend-expo
 .\build-release-apk.ps1
 ```
 
-결과 파일:
+- 결과 파일:
 
 ```text
 frontend-expo/android/app/build/outputs/apk/release/app-release.apk
@@ -212,12 +215,14 @@ cd backend
 
 ## 설계 선택과 한계
 
-- 별도 사용자 DB를 제거해 운영 복잡도를 줄이고 개인 기록은 기기에 저장했습니다.
-- 추천에 필요한 취향과 맛집 정보는 요청 시 백엔드와 OpenAI에 전달됩니다.
-- AI가 알레르기 안전을 완전히 보장할 수 없으므로 사용자는 원문 레시피와 제품 표시를 다시 확인해야 합니다.
-- 8초 대체 응답은 상세 레시피 검증 대신 검색 결과 페이지를 제공할 수 있습니다.
-- 현재 릴리스 APK는 `arm64-v8a` Android 실기기용입니다.
+- 별도 사용자 DB 제거로 운영 복잡도 축소
+- 개인 기록의 기기 로컬 저장
+- 추천 요청 시 필요한 취향·맛집 정보를 백엔드와 OpenAI에 전달
+- AI의 알레르기 안전 보장 한계
+- 사용자의 원문 레시피·제품 표시 재확인 필요
+- 8초 대체 응답 시 상세 레시피 검증 대신 검색 결과 페이지 제공 가능
+- 현재 릴리스 APK 대상: `arm64-v8a` Android 실기기
 
 ## License
 
-This project is licensed under the [MIT License](frontend-expo/LICENSE).
+- 적용 라이선스: [MIT License](frontend-expo/LICENSE)
